@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+
+    <properties resource="jdbc.properties"/>
+
+
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+
+    <!--<typeAliases>
+        <package name="com.bjpowernode.crm.settings.domain"/>
+        <package name="com.bjpowernode.crm.workbench.domain"/>
+    </typeAliases>-->
+
+    <environments default="mydev">
+        <environment id="mydev">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.user}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+
+
+    </environments>
+
+    <mappers>
+<!--        <mapper resource="com/bjpowernode/crm/settings/dao/UserDao.xml"/>-->
+<!--        <mapper resource="com/bjpowernode/crm/workbench/dao/ActivityDao.xml"/>-->
+<!--        <mapper resource="com/bjpowernode/crm/workbench/dao/ActivityRemarkDao.xml"/>-->
+        <package name="com.bjpowernode.crm.settings.dao"/>
+        <package name="com.bjpowernode.crm.workbench.dao"/>
+    </mappers>
+</configuration>
