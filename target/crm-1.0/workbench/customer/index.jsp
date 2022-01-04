@@ -25,8 +25,77 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			//防止下拉菜单消失
 	        e.stopPropagation();
 	    });
+		pageList(1,10)
 		
 	});
+
+	function pageList(pageNo,pageSize) {
+		//将全选的复选框的勾干掉
+		$("#clueCheckbox").prop("checked",false)
+
+		//查询前，将隐藏域中保存的信息取出来，重新赋予到搜索框中
+		$("#search-fullname").val($.trim($("#hidden-fullname").val()))
+		$("#search-company").val($.trim($("#hidden-company").val()))
+		$("#search-phone").val($.trim($("#hidden-phone").val()))
+		$("#search-source").val($.trim($("#hidden-source").val()))
+		$("#search-owner").val($.trim($("#hidden-owner").val()))
+		$("#search-mphone").val($.trim($("#hidden-mphone").val()))
+		$("#search-state").val($.trim($("#hidden-state").val()))
+
+		$.ajax({
+			url : "workbench/clue/pageList.do",
+			data : {
+				"pageNo" : pageNo,
+				"pageSize" : pageSize,
+				"name" : $.trim($("#search-name").val()),
+				"owner" : $.trim($("#search-owner").val()),
+				"phone" : $.trim($("#search-phone").val()),
+				"website" : $.trim($("#search-website").val())
+			},
+			type : "get",
+			dataType : "json",
+			success : function (data) {
+
+				var html = "";
+
+				//每一个element就是每一个市场活动对象
+				$.each(data.dataList,function(index,element){
+					html += '<tr class="active">'
+					html += '<td><input type="checkbox" name="customerCheckbox" value="'+element.id+'"/></td>'
+					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/customer/detail.do?id='+element.id+'\';">'+element.name+'</a></td>'
+					html += '<td>'+element.owner+'</td>'
+					html += '<td>'+element.phone+'</td>'
+					html += '<td>'+element.website+'</td>'
+					html += '</tr>'
+				})
+
+				$("#customerBody").html(html)
+
+				//计算总页数
+				var totalPages = data.total % pageSize == 0 ? data.total/pageSize : parseInt(data.total/pageSize) + 1
+
+				//数据处理完毕后，结合分页查询，对前端展现分页信息
+				$("#customerPage").bs_pagination({
+					currentPage: pageNo, // 页码
+					rowsPerPage: pageSize, // 每页显示的记录条数
+					maxRowsPerPage: 20, // 每页最多显示的记录条数
+					totalPages: totalPages, // 总页数
+					totalRows: data.total, // 总记录条数
+
+					visiblePageLinks: 10, // 显示几个卡片
+
+					showGoToPage: true,
+					showRowsPerPage: true,
+					showRowsInfo: true,
+					showRowsDefaultInfo: true,
+
+					onChangePage : function(event, data){
+						pageList(data.currentPage , data.rowsPerPage);
+					}
+				});
+			}
+		})
+	}
 	
 </script>
 </head>
@@ -219,32 +288,32 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">名称</div>
-				      <input class="form-control" type="text">
+				      <input class="form-control" type="text" id="search-name">
 				    </div>
 				  </div>
 				  
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">所有者</div>
-				      <input class="form-control" type="text">
+				      <input class="form-control" type="text" id="search-owner">
 				    </div>
 				  </div>
 				  
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">公司座机</div>
-				      <input class="form-control" type="text">
+				      <input class="form-control" type="text" id="search-phone">
 				    </div>
 				  </div>
 				  
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">公司网站</div>
-				      <input class="form-control" type="text">
+				      <input class="form-control" type="text" id="search-website">
 				    </div>
 				  </div>
 				  
-				  <button type="submit" class="btn btn-default">查询</button>
+				  <button type="button" id="searchBtn" class="btn btn-default">查询</button>
 				  
 				</form>
 			</div>
@@ -267,8 +336,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<td>公司网站</td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody id="customerBody">
+						<%--<tr>
 							<td><input type="checkbox" /></td>
 							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.jsp';">动力节点</a></td>
 							<td>zhangsan</td>
@@ -281,44 +350,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                             <td>zhangsan</td>
                             <td>010-84846003</td>
                             <td>http://www.bjpowernode.com</td>
-                        </tr>
+                        </tr>--%>
 					</tbody>
 				</table>
 			</div>
 			
 			<div style="height: 50px; position: relative;top: 30px;">
-				<div>
-					<button type="button" class="btn btn-default" style="cursor: default;">共<b>50</b>条记录</button>
-				</div>
-				<div class="btn-group" style="position: relative;top: -34px; left: 110px;">
-					<button type="button" class="btn btn-default" style="cursor: default;">显示</button>
-					<div class="btn-group">
-						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-							10
-							<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu" role="menu">
-							<li><a href="#">20</a></li>
-							<li><a href="#">30</a></li>
-						</ul>
-					</div>
-					<button type="button" class="btn btn-default" style="cursor: default;">条/页</button>
-				</div>
-				<div style="position: relative;top: -88px; left: 285px;">
-					<nav>
-						<ul class="pagination">
-							<li class="disabled"><a href="#">首页</a></li>
-							<li class="disabled"><a href="#">上一页</a></li>
-							<li class="active"><a href="#">1</a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li><a href="#">5</a></li>
-							<li><a href="#">下一页</a></li>
-							<li class="disabled"><a href="#">末页</a></li>
-						</ul>
-					</nav>
-				</div>
+				<div id="customerPage" style="position: fixed; bottom: 0; left: 0; right: 0"></div>
 			</div>
 			
 		</div>
