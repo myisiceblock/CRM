@@ -111,6 +111,19 @@
     <url-pattern>/workbench/transaction/getCharts.do</url-pattern>
   </servlet-mapping>
   <!--交易控制器================over-->
+
+  <!--客户控制器================begin-->
+  <servlet>
+    <servlet-name>CustomerController</servlet-name>
+    <servlet-class>com.bjpowernode.crm.workbench.web.controller.CustomerController</servlet-class>
+  </servlet>
+
+
+  <servlet-mapping>
+    <servlet-name>CustomerController</servlet-name>
+    <url-pattern>/workbench/customer/pageList.do</url-pattern>
+  </servlet-mapping>
+  <!--客户控制器================over-->
 </web-app>
 
 

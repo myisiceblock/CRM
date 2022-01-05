@@ -5,6 +5,44 @@
 
 <mapper namespace="com.bjpowernode.crm.workbench.dao.CustomerDao">
 
+    <select id="getCustomerListByCondition" resultType="com.bjpowernode.crm.workbench.domain.Customer">
+        select c.name,u.name as owner,c.phone,c.website from tbl_customer c join tbl_user u on c.owner=u.id
+        <where>
+            <if test="name != null and name != ''">
+                c.name like '%' #{name} '%'
+            </if>
+            <if test="owner != null and owner !=''">
+                and u.name like '%' #{owner} '%'
+            </if>
+            <if test="phone != null and phone !=''">
+                and c.phone like '%' #{phone} '%'
+            </if>
+            <if test="website != null and website !=''">
+                and c.website like '%' #{website} '%'
+            </if>
+        </where>
+
+        order by c.createTime desc limit #{skipCount},#{pageSize}
+    </select>
+
+    <select id="getTotalByCondition" resultType="int">
+        select count(*) from tbl_customer c join tbl_user u on c.owner=u.id
+        <where>
+            <if test="name != null and name != ''">
+                c.name like '%' #{name} '%'
+            </if>
+            <if test="owner != null and owner !=''">
+                and u.name like '%' #{owner} '%'
+            </if>
+            <if test="phone != null and phone !=''">
+                and c.phone like '%' #{phone} '%'
+            </if>
+            <if test="website != null and website !=''">
+                and c.website like '%' #{website} '%'
+            </if>
+        </where>
+    </select>
+
     <select id="getCustomerName" resultType="String">
         select name from tbl_customer where name like '%' #{name} '%'
     </select>

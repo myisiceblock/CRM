@@ -22,7 +22,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 <script type="text/javascript" src="jquery/bs_typeahead/bootstrap3-typeahead.min.js"></script>
 	<script>
-
 		var json = {
 			<%
 				for(String key:set){
@@ -271,8 +270,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<div style="position:  relative; left: 30px;">
 		<h3>创建交易</h3>
 	  	<div style="position: relative; top: -40px; left: 70%;">
-			<button type="button" class="btn btn-primary"  id="saveTranBtn" >保存</button>
-			<button type="button" class="btn btn-default">取消</button>
+			<button type="button" class="btn btn-primary" id="saveTranBtn" >保存</button>
+			<button type="button" class="btn btn-default" onclick="window.location='workbench/transaction/index.jsp'">取消</button>
 		</div>
 		<hr style="position: relative; top: -40px;">
 	</div>

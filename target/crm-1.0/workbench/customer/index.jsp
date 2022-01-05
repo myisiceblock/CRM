@@ -15,6 +15,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+	<link rel="stylesheet" type="text/css" href="jquery/bs_pagination/jquery.bs_pagination.min.css">
+	<script type="text/javascript" src="jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
+	<script type="text/javascript" src="jquery/bs_pagination/en.js"></script>
 
 <script type="text/javascript">
 
@@ -25,25 +28,30 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			//防止下拉菜单消失
 	        e.stopPropagation();
 	    });
+
 		pageList(1,10)
-		
+
+		$("#searchBtn").click(function () {
+			$("#hidden-name").val($("#search-name").val())
+			$("#hidden-phone").val($("#search-phone").val())
+			$("#hidden-website").val($("#search-website").val())
+			$("#hidden-owner").val($("#search-owner").val())
+
+			pageList(1,10)
+		})
 	});
 
 	function pageList(pageNo,pageSize) {
 		//将全选的复选框的勾干掉
-		$("#clueCheckbox").prop("checked",false)
+		$("#customerCheckBox").prop("checked",false)
 
 		//查询前，将隐藏域中保存的信息取出来，重新赋予到搜索框中
-		$("#search-fullname").val($.trim($("#hidden-fullname").val()))
-		$("#search-company").val($.trim($("#hidden-company").val()))
-		$("#search-phone").val($.trim($("#hidden-phone").val()))
-		$("#search-source").val($.trim($("#hidden-source").val()))
-		$("#search-owner").val($.trim($("#hidden-owner").val()))
-		$("#search-mphone").val($.trim($("#hidden-mphone").val()))
-		$("#search-state").val($.trim($("#hidden-state").val()))
-
+		$("#search-name").val($("#hidden-name").val())
+		$("#search-phone").val($("#hidden-phone").val())
+		$("#search-website").val($("#hidden-website").val())
+		$("#search-owner").val($("#hidden-owner").val())
 		$.ajax({
-			url : "workbench/clue/pageList.do",
+			url : "workbench/customer/pageList.do",
 			data : {
 				"pageNo" : pageNo,
 				"pageSize" : pageSize,
@@ -284,7 +292,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		
 			<div class="btn-toolbar" role="toolbar" style="height: 80px;">
 				<form class="form-inline" role="form" style="position: relative;top: 8%; left: 5px;">
-				  
+				  <input type="hidden" id="hidden-name">
+				  <input type="hidden" id="hidden-owner">
+				  <input type="hidden" id="hidden-phone">
+				  <input type="hidden" id="hidden-website">
+
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">名称</div>
@@ -329,7 +341,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<table class="table table-hover">
 					<thead>
 						<tr style="color: #B3B3B3;">
-							<td><input type="checkbox" /></td>
+							<td><input type="checkbox" id="customerCheckBox"/></td>
 							<td>名称</td>
 							<td>所有者</td>
 							<td>公司座机</td>
