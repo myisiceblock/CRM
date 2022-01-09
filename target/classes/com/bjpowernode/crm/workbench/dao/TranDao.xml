@@ -5,6 +5,14 @@
 
 <mapper namespace="com.bjpowernode.crm.workbench.dao.TranDao">
 
+    <delete id="delete">
+        delete from tbl_tran where id=#{id}
+    </delete>
+
+    <select id="detailTranByCustomerId" resultType="com.bjpowernode.crm.workbench.domain.Tran">
+        select id,name,money,stage,expectedDate,type from tbl_tran where customerId=#{customderId}
+    </select>
+
     <select id="getCharts" resultType="map">
         select count(*) as value,stage as name from tbl_tran group by stage
     </select>

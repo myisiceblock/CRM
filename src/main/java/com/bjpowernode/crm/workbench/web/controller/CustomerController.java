@@ -18,11 +18,14 @@ import com.bjpowernode.crm.workbench.service.TranService;
 import com.bjpowernode.crm.workbench.service.impl.ContactsServiceImpl;
 import com.bjpowernode.crm.workbench.service.impl.CustomerServiceImpl;
 import com.bjpowernode.crm.workbench.service.impl.TranServiceImpl;
+import netscape.security.UserTarget;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.JspTagException;
+import javax.xml.ws.Service;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -36,9 +39,36 @@ public class CustomerController extends HttpServlet {
         String servletPath = request.getServletPath();
         if("/workbench/customer/pageList.do".equals(servletPath)){
             pageList(request,response);
-        }else if("/workbench/customer/xxx.do".equals(servletPath)){
-            //xxx(request,response);
+        }else if("/workbench/customer/detail.do".equals(servletPath)){
+            detail(request,response);
+        }else if("/workbench/customer/detailTranByCustomerId.do".equals(servletPath)){
+            detailTranByCustomerId(request,response);
         }
+    }
+
+    private void detailTranByCustomerId(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到跳转客户详细页获取交易列表");
+        String customerId = request.getParameter("customerId");
+        CustomerService customerService = (CustomerService) ServiceFactory.getService(new CustomerServiceImpl());
+        List<Tran> tranList = customerService.detailTranByCustomerId(customerId);
+        Map<String,String> pMap = (Map<String, String>) this.getServletContext().getAttribute("pMap");
+
+        for (Tran t :
+                tranList) {
+            String stage = t.getStage();
+            String possibility = pMap.get(stage);
+            t.setPossibility(possibility);
+        }
+        PrintJson.printJsonObj(response,tranList);
+    }
+
+    private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("进入到跳转客户详细列表页");
+        String id = request.getParameter("id");
+        CustomerService customerService = (CustomerService) ServiceFactory.getService(new CustomerServiceImpl());
+        Customer customer = customerService.detail(id);
+        request.setAttribute("customer",customer);
+        request.getRequestDispatcher("/workbench/customer/detail.jsp").forward(request,response);
     }
 
     private void pageList(HttpServletRequest request, HttpServletResponse response) {

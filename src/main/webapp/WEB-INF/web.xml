@@ -109,6 +109,7 @@
     <url-pattern>/workbench/transaction/getHistoryListByTranId.do</url-pattern>
     <url-pattern>/workbench/transaction/changeStage.do</url-pattern>
     <url-pattern>/workbench/transaction/getCharts.do</url-pattern>
+    <url-pattern>/workbench/transaction/delete.do</url-pattern>
   </servlet-mapping>
   <!--交易控制器================over-->
 
@@ -122,6 +123,8 @@
   <servlet-mapping>
     <servlet-name>CustomerController</servlet-name>
     <url-pattern>/workbench/customer/pageList.do</url-pattern>
+    <url-pattern>/workbench/customer/detail.do</url-pattern>
+    <url-pattern>/workbench/customer/detailTranByCustomerId.do</url-pattern>
   </servlet-mapping>
   <!--客户控制器================over-->
 </web-app>

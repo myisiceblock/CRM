@@ -5,8 +5,26 @@
 
 <mapper namespace="com.bjpowernode.crm.workbench.dao.CustomerDao">
 
+    <select id="detail" resultType="com.bjpowernode.crm.workbench.domain.Customer">
+        select
+            c.id,
+            u.name as owner,
+            c.name,
+            c.website,
+            c.phone,
+            c.createBy,
+            c.createTime,
+            c.editBy,
+            c.editTime,
+            c.contactSummary,
+            c.nextContactTime,
+            c.description,
+            c.address
+        from tbl_customer c join tbl_user u on c.owner=u.id where c.id=#{id}
+    </select>
+
     <select id="getCustomerListByCondition" resultType="com.bjpowernode.crm.workbench.domain.Customer">
-        select c.name,u.name as owner,c.phone,c.website from tbl_customer c join tbl_user u on c.owner=u.id
+        select c.id,c.name,u.name as owner,c.phone,c.website from tbl_customer c join tbl_user u on c.owner=u.id
         <where>
             <if test="name != null and name != ''">
                 c.name like '%' #{name} '%'

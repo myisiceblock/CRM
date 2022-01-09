@@ -20,4 +20,6 @@ public interface TranService {
     boolean changeStage(Tran tran);
 
     Map<String, Object> getCharts();
+
+    boolean delete(String id);
 }

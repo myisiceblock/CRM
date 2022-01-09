@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.ws.Service;
+import java.awt.print.PrinterGraphics;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +49,18 @@ public class TranController extends HttpServlet {
             changeStage(request,response);
         }else if("/workbench/transaction/getCharts.do".equals(servletPath)){
             getCharts(request,response);
+        }else if("/workbench/transaction/delete.do".equals(servletPath)){
+            delete(request,response);
         }
+    }
+
+    private void delete(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到删除交易操作");
+
+        String id = request.getParameter("id");
+        TranService tranService = (TranService) ServiceFactory.getService(new TranServiceImpl());
+        boolean flag = tranService.delete(id);
+        PrintJson.printJsonFlag(response,flag);
     }
 
     private void getCharts(HttpServletRequest request, HttpServletResponse response) {

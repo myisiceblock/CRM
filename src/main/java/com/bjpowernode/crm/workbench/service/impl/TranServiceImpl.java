@@ -95,6 +95,15 @@ public class TranServiceImpl implements TranService {
         return map;
     }
 
+    public boolean delete(String id) {
+        boolean flag = true;
+        int count = tranDao.delete(id);
+        if(count != 1){
+            flag = false;
+        }
+        return flag;
+    }
+
     public boolean changeStage(Tran tran) {
         boolean flag = true;
         //改变交易阶段

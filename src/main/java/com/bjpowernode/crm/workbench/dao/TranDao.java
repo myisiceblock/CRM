@@ -22,4 +22,8 @@ public interface TranDao {
     int getStageTotal();
 
     List<Map<String, Object>> getCharts();
+
+    List<Tran> detailTranByCustomerId(String customerId);
+
+    int delete(String id);
 }
